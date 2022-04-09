@@ -2,7 +2,7 @@
 CREATE TABLE attaque (
     idAttaque INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     nom VARCHAR(60)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Quelques requêtes à tester
 ALTER TABLE attaque
@@ -24,6 +24,6 @@ CREATE TABLE utilise (
     idPersonnage INT NOT NULL,
     levelAttaque INT,
     PRIMARY KEY (idAttaque, idPersonnage),
-    CONSTRAINT FK_ATTAQUE_UTILISE FOREIGN KEY (idAttaque) REFERENCES attaque(idAttaque),
-    CONSTRAINT FK_PERSONNAGE_UTILISE FOREIGN KEY (idPersonnage) REFERENCES personnage(idPersonnage)
-);
+    CONSTRAINT FK_ATTAQUE_UTILISE FOREIGN KEY (idAttaque) REFERENCES attaque(idAttaque) ON DELETE CASCADE,
+    CONSTRAINT FK_PERSONNAGE_UTILISE FOREIGN KEY (idPersonnage) REFERENCES personnage(idPersonnage) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
