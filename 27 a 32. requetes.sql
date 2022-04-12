@@ -75,3 +75,37 @@ ORDER BY degat DESC
 -- Nombre de lignes dans la table 'utilise'
 SELECT COUNT(*) AS "nb d'attaques"
 FROM utilise
+
+-- Afficher le nombre d'attaques par perso
+SELECT p.nom, COUNT(a.nom) AS "nb attaques"
+FROM personnage AS p INNER JOIN utilise AS u ON u.idPersonnage = p.idPersonnage
+INNER JOIN attaque AS a ON u.idAttaque = a.idAttaque
+GROUP BY p.nom
+
+-- Afficher le(les) perso(s) ayant le plus d'attaques
+SELECT p.nom, COUNT(a.nom) AS "nb attaques"
+FROM personnage AS p INNER JOIN utilise AS u ON u.idPersonnage = p.idPersonnage
+INNER JOIN attaque AS a ON u.idAttaque = a.idAttaque
+GROUP BY p.nom
+HAVING COUNT(*) >= ALL(
+    SELECT COUNT(a.nom)
+    FROM personnage AS p INNER JOIN utilise AS u ON u.idPersonnage = p.idPersonnage
+    INNER JOIN attaque AS a ON u.idAttaque = a.idAttaque
+    GROUP BY p.nom
+)
+
+-- Afficher le(les) perso(s) ayant le moins d'attaques
+SELECT p.nom, COUNT(u.levelAttaque) AS "nb attaques"
+FROM personnage AS p
+LEFT JOIN utilise AS u ON u.idPersonnage = p.idPersonnage
+GROUP BY p.nom
+HAVING COUNT(u.levelAttaque) <= ALL(
+    SELECT COUNT(u.levelAttaque)
+    FROM personnage AS p LEFT JOIN utilise AS u ON u.idPersonnage = p.idPersonnage
+    GROUP BY p.nom
+)
+
+-- Afficher les personnages nés avant 2003
+SELECT *
+FROM personnage
+WHERE YEAR(dateNaissance) < 2003
