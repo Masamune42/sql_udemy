@@ -44,3 +44,34 @@ INNER JOIN attaque AS att ON att.idAttaque = u.idAttaque
 INNER JOIN arme AS a ON a.idArme = p.idArmeUtilise
 INNER JOIN typearme AS t ON t.idTypeArme = a.idTypeArme
 WHERE t.estDistance = 1
+
+-- Récupérer le plus haut level d'utilisation de l'attaque 1
+SELECT MAX(u.levelAttaque)
+FROM attaque AS a INNER JOIN utilise AS u ON a.idAttaque = u.idAttaque
+WHERE a.nom = "attaque1"
+
+-- Récupérer le perso utilisant l'attaque 1 avec le level le plus haut
+SELECT p.nom, a.nom, u.levelAttaque
+FROM personnage AS p INNER JOIN utilise AS u ON p.idPersonnage = u.idPersonnage
+INNER JOIN attaque AS a ON a.idAttaque = u.idAttaque
+WHERE a.nom = "attaque1"
+AND levelAttaque = (
+    SELECT MAX(u.levelAttaque)
+FROM attaque AS a INNER JOIN utilise AS u ON a.idAttaque = u.idAttaque
+WHERE a.nom = "attaque1"
+)
+
+-- Calculer le nombre de dégats que fait chaque personnage (degat * (0,5 * level perso))
+SELECT p.nom, a.nom, a.degat * (0.5 * p.level) AS "Degat par attaque"
+FROM personnage AS p INNER JOIN arme AS a ON a.idArme = p.idArmeUtilise
+ORDER BY degat DESC
+
+-- Récupérer le nb de perso faisant moins de 100 de dégat
+SELECT p.nom, a.nom, a.degat * (0.5 * p.level) AS "Degat"
+FROM personnage AS p INNER JOIN arme AS a ON a.idArme = p.idArmeUtilise
+HAVING Degat < 100
+ORDER BY degat DESC
+
+-- Nombre de lignes dans la table 'utilise'
+SELECT COUNT(*) AS "nb d'attaques"
+FROM utilise
