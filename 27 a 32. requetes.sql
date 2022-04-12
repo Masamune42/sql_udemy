@@ -22,3 +22,25 @@ INNER JOIN arme AS a2 ON a2.idArme = d.idArme
 INNER JOIN typearme AS t2 ON t2.idTypeArme = a2.idTypeArme
 WHERE p.nom = "wawaf"
 ORDER BY att.nom, a2.nom;
+
+-- Moyenne des attaques de tous les joueurs
+SELECT p.nom AS "Perso",c.nom AS "Classe" , AVG(a.baseDegat) AS "Moy Attaques"
+FROM personnage as p INNER JOIN utilise AS u ON p.idPersonnage = u.idPersonnage
+INNER JOIN attaque AS a ON a.idAttaque = u.idAttaque
+INNER JOIN classe AS c ON c.idClasse = p.idClasse
+GROUP BY p.nom, c.nom
+
+-- Récupérer tous les personnages et pour chacun récupérer les attaque et afficher que les lignes 3 à 5
+SELECT p.idPersonnage, p.nom AS "Perso", a.nom AS "Attaque"
+FROM personnage as p LEFT JOIN utilise AS u ON p.idPersonnage = u.idPersonnage
+LEFT JOIN attaque AS a ON a.idAttaque = u.idAttaque
+LEFT JOIN classe AS c ON c.idClasse = p.idClasse
+LIMIT 3 OFFSET 2
+
+-- Afficher toutes les attaques des personnages utilisant des armes à distance
+SELECT p.nom AS "Perso", att.nom AS "Attaque", att.baseDegat, a.nom AS "Arme"
+FROM personnage AS p INNER JOIN utilise AS u ON u.idPersonnage = p.idPersonnage
+INNER JOIN attaque AS att ON att.idAttaque = u.idAttaque
+INNER JOIN arme AS a ON a.idArme = p.idArmeUtilise
+INNER JOIN typearme AS t ON t.idTypeArme = a.idTypeArme
+WHERE t.estDistance = 1
