@@ -114,3 +114,16 @@ WHERE YEAR(dateNaissance) < 2003
 SELECT *
 FROM attaque
 WHERE nom NOT LIKE "Coup%"
+
+-- Modifier les attaques commençant par "Coup" > +20 dégats
+UPDATE attaque
+SET baseDegat = baseDegat + 20
+WHERE nom LIKE "Coup%";
+
+-- Supprimer les attaques 1 à 3
+DELETE FROM attaque
+WHERE nom LIKE "attaque%";
+
+-- supprimer les persos nés avant 2003
+DELETE FROM personnage
+WHERE YEAR(dateNaissance) < 2003;
