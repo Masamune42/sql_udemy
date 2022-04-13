@@ -109,3 +109,8 @@ HAVING COUNT(u.levelAttaque) <= ALL(
 SELECT *
 FROM personnage
 WHERE YEAR(dateNaissance) < 2003
+
+-- Récupérer les attaques ne commençants pas par "Coup"
+SELECT *
+FROM attaque
+WHERE nom NOT LIKE "Coup%"
